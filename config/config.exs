@@ -50,7 +50,7 @@ config :ueberauth, Ueberauth,
   providers: [
     auth0: {
       Ueberauth.Strategy.Auth0,
-      [request_path: "/auth/login", callback_path: "/auth/auth0_callback"]
+      [request_path: "/auth/login", callback_path: "/auth/login_callback"]
     }
   ]
 

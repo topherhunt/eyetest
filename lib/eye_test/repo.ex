@@ -13,4 +13,11 @@ defmodule EyeTest.Repo do
 
   # Raises if none found
   def first!(query), do: query |> limit(1) |> Repo.one!()
+
+  def ensure_success(result) do
+    case result do
+      {:ok, object} -> object
+      {:error, changeset} -> raise Ecto.InvalidChangesetError, changeset: changeset
+    end
+  end
 end

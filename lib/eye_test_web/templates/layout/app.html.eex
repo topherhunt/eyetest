@@ -6,29 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Grassflog</title>
+    <title>Eye Test</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <%= link "My Site", to: "#", class: "navbar-brand" %>
+      <%= link "Eye Test", to: "#", class: "navbar-brand" %>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar-content">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div id="navbar-content" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto"></ul>
         <ul class="navbar-nav">
-          <li class="nav-item"><%= link "Log in", to: "#", class: "nav-link" %></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-              <i class="icon">settings</i> <span class="caret"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <div class="dropdown-item em small">Dropdown text</div>
-              <%= link "A link", to: "#", class: "dropdown-item text-danger" %>
-            </div>
-          </li>
+          <%= if @current_user do %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon">face</i> <span class="caret"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item em small">Logged in as <%= @current_user.email %></div>
+                <%= link "Log out", to: Routes.auth_path(@conn, :logout), class: "dropdown-item text-danger" %>
+              </div>
+            </li>
+          <% else %>
+            <li class="nav-item"><%= link "Log in", to: Routes.auth_path(@conn, :login), class: "nav-link" %></li>
+          <% end %>
         </ul>
       </div>
     </nav>

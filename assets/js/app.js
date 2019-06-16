@@ -10,6 +10,9 @@ import css from "../css/app.css"
 // Import dependencies
 //
 import "phoenix_html"
+
+// TODO: bootstrap.js currently relies on popper.js, but we don't use popper tooltips bc
+// I don't trust them to play nice with LiveView. Don't ship all this dead code.
 import "bootstrap"
 
 // Import local files

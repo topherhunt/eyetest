@@ -1,18 +1,27 @@
 use Mix.Config
 
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
 config :eye_test, EyeTestWeb.Endpoint,
   http: [port: 4002],
-  server: false
+  server: true
 
-# Print only warnings and errors during test
-config :logger, level: :warn
+# Log ALL messages (default is :warn) but route them to a logfile.
+config :logger,
+  backends: [{LoggerFileBackend, :test_log}]
+
+config :logger, :test_log,
+  path: "log/test.log",
+  format: "$date $time $metadata[$level] $message\n",
+  # :debug for ALL queries etc; :brief for only the basics
+  level: :debug
 
 # Configure your database
-config :eye_test, EyeTest.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "eye_test_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+config :rtl, RTL.Repo,
+  pool: Ecto.Adapters.SQL.Sandbox,
+  # long timeout to allow debugging in tests
+  ownership_timeout: 20 * 60 * 1000
+
+config :rtl, RTL.Mailer, adapter: Bamboo.TestAdapter
+
+config :hound, driver: "chrome_driver", browser: "chrome_headless"
+
+config :rollbax, enabled: false

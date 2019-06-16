@@ -36,13 +36,22 @@ defmodule EyeTest.MixProject do
       {:phoenix, "~> 1.4.3"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.0"},
-      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:ecto_sql, "~> 3.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:rollbax, "~> 0.10"},
+      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_auth0, "~> 0.3"},
+      {:timex, "~> 3.5"},
+      {:bamboo, "~> 1.2"},
+      {:bamboo_smtp, "~> 1.7"},
+      {:hound, "~> 1.0", only: :test},
+      {:logger_file_backend, "~> 0.0", only: :test}
     ]
   end
 
@@ -56,7 +65,12 @@ defmodule EyeTest.MixProject do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: [
+        "ecto.create --quiet",
+        "ecto.migrate",
+        "run priv/clear_test_log.exs",
+        "test"
+      ]
     ]
   end
 end

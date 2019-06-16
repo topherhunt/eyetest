@@ -11,11 +11,15 @@ use Mix.Config
 # before starting your production server.
 config :eye_test, EyeTestWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "example.com", port: 80],
+  url: [scheme: "https", host: H.env!("HOST_NAME"), port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-# Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
+
+config :rollbax,
+  access_token: H.env!("ROLLBAR_ACCESS_TOKEN"),
+  environment: "prod"
 
 # ## SSL Support
 #

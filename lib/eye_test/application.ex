@@ -19,6 +19,13 @@ defmodule EyeTest.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: EyeTest.Supervisor]
+
+    # Subscribe to Ecto queries for logging
+    # See https://hexdocs.pm/ecto/Ecto.Repo.html#module-telemetry-events
+    # and https://github.com/beam-telemetry/telemetry
+    handler = &EyeTest.Telemetry.handle_event/4
+    :ok = :telemetry.attach("eye_test_ecto", [:eye_test, :repo, :query], handler, %{})
+
     Supervisor.start_link(children, opts)
   end
 

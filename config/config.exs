@@ -21,7 +21,8 @@ config :eye_test,
 config :eye_test, EyeTest.Repo,
   url: H.env!("DATABASE_URL"),
   # Heroku PG hobby-dev allows max 20 db connections
-  pool_size: 10
+  pool_size: 10,
+  log: false
 
 # Configures the endpoint
 config :eye_test, EyeTestWeb.Endpoint,

@@ -15,12 +15,12 @@ config :logger, :test_log,
   level: :debug
 
 # Configure your database
-config :rtl, RTL.Repo,
+config :eye_test, EyeTest.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   # long timeout to allow debugging in tests
   ownership_timeout: 20 * 60 * 1000
 
-config :rtl, RTL.Mailer, adapter: Bamboo.TestAdapter
+config :eye_test, EyeTest.Mailer, adapter: Bamboo.TestAdapter
 
 config :hound, driver: "chrome_driver", browser: "chrome_headless"
 

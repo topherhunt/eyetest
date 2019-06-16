@@ -19,7 +19,7 @@ defmodule EyeTestWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: EyeTestWeb
+      use Phoenix.Controller, namespace: EyeTestWeb, log: false
 
       import Plug.Conn
       import EyeTestWeb.Gettext

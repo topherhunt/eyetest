@@ -56,7 +56,7 @@ config :eye_test, EyeTestWeb.Endpoint,
     ]
   ]
 
-config :rtl, RTL.Mailer, adapter: Bamboo.LocalAdapter
+config :eye_test, EyeTest.Mailer, adapter: Bamboo.LocalAdapter
 
 config :logger, level: :debug
 

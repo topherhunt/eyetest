@@ -24,7 +24,10 @@ defmodule EyeTestWeb.Endpoint do
   end
 
   plug Plug.RequestId
-  plug Plug.Logger
+
+  # Custom one-line request logging
+  # Must come before the session & router plugs.
+  plug EyeTestWeb.RequestLogger
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],

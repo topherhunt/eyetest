@@ -1,3 +1,7 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "layout.scss";
+@import "overrides.scss";
+@import "utilities.scss";
+@import "icons.css";

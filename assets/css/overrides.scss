@@ -1,0 +1,26 @@
+/* Bootstrap overrides */
+
+label { cursor: pointer; }
+.label a { color: #fff !important; }
+table.table { width: auto; margin-bottom: 0px; }
+.navbar {
+  box-shadow: 0px 0px 5px 0px #bbb;
+  padding: 0.1rem 1rem;
+}
+.nav-link.active { background-color: #eee; }
+.btn { border-radius: 0.5rem; }
+
+/* Override certain colors. */
+/* TODO: Override the vars pre-compilation instead. */
+.text-info { color: #275972; } /* original: #31708f */
+.text-warning { color: #D07B0D !important; } /* original: #ffc107 */
+.text-danger { color: #a94442 !important; }
+
+/* Trix overrides */
+
+// trix-editor { min-height: 7em; }
+// trix-editor:empty:not(:focus)::before { color: #aaa; }
+// Make the toolbar buttons smaller thus less busy
+trix-toolbar { font-size: 80%; }
+// Blue highlight when focused
+trix-editor:focus { box-shadow: 0px 0px 5px 1px rgb(138, 192, 250); }

@@ -28,6 +28,8 @@ defmodule EyeTestWeb.Router do
       get "/logout", AuthController, :logout
       get "/force_login/:id", AuthController, :force_login
     end
+
+    resources "/locations", LocationController
   end
 
   # Other scopes may use custom stacks.

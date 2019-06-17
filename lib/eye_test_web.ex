@@ -23,6 +23,7 @@ defmodule EyeTestWeb do
 
       import Plug.Conn
       import EyeTestWeb.Gettext
+      import EyeTestWeb.SentryPlugs
       alias EyeTestWeb.Router.Helpers, as: Routes
     end
   end

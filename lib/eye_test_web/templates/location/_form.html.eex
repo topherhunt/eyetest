@@ -1,0 +1,20 @@
+<%= form_for @changeset, @path, fn(f) -> %>
+  <div class="form-group">
+    <%= label f, :name do %>
+      Describe the room & your location
+      <div class="small em">Be specific enough so you can rememember exactly where to stand each time you do a test!</div>
+    <% end %>
+    <%= text_input f, :name, class: "form-control", autofocus: true %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :cm_from_screen, "Distance from screen (in cm)" %>
+    <%= text_input f, :cm_from_screen, class: "form-control" %>
+    <%= error_tag f, :cm_from_screen %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Save", class: "btn btn-primary" %>
+  </div>
+<% end %>

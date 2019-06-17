@@ -1,0 +1,7 @@
+<h1>Edit location</h1>
+
+<p>You can adjust the description of this location using the form below. <strong>Remember, if you change where you stand/sit for this location, it will invalidate all previous results!</strong> Consider <%= link "adding a new location", to: Routes.location_path(@conn, :new) %> instead.</p>
+
+<%= render "_form.html",
+  changeset: @changeset,
+  path: Routes.location_path(@conn, :update, @location) %>

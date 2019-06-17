@@ -8,7 +8,8 @@ defmodule EyeTest.Data.Location do
 
   schema "locations" do
     belongs_to :user, Data.User
-    field :room_description, :string
+    # Description of this room & your location in it
+    field :name, :string
     field :cm_from_screen, :integer
     timestamps()
   end
@@ -44,10 +45,10 @@ defmodule EyeTest.Data.Location do
 
   def new_changeset(params \\ %{}), do: changeset(%__MODULE__{}, params)
 
-  def changeset(user, attrs) do
+  def changeset(user, params \\ %{}) do
     user
-    |> cast(attrs, [:user_id, :room_description, :cm_from_screen])
-    |> validate_required([:user_id, :room_description, :cm_from_screen])
+    |> cast(params, [:user_id, :name, :cm_from_screen])
+    |> validate_required([:user_id, :name, :cm_from_screen])
   end
 
   #
@@ -59,5 +60,6 @@ defmodule EyeTest.Data.Location do
   end
 
   def filter(query, :id, id), do: Q.where(query, [l], l.id == ^id)
-  def filter(query, :user_id, user_id), do: Q.where(query, [l], l.user_id == ^user_id)
+  def filter(query, :user, user), do: Q.where(query, [l], l.user_id == ^user.id)
+  def filter(query, :order, :name), do: Q.order_by(query, [l], asc: l.name)
 end

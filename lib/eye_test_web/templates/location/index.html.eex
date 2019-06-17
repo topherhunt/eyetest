@@ -1,0 +1,16 @@
+<h1>My locations</h1>
+
+<table class="table">
+  <%= for location <- @locations do %>
+    <tr>
+      <th><%= location.name %></th>
+      <td>Distance from screen: <%= location.cm_from_screen %> cm</td>
+      <td>
+        <%= link "edit", to: Routes.location_path(@conn, :edit, location) %> &nbsp;
+        <%= link "delete", to: Routes.location_path(@conn, :delete, location), method: :delete, class: "text-danger", data_confirm: "Really delete this location? Any associated test data will be kept, but will lose its context." %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link "+ Add a location", to: Routes.location_path(@conn, :new) %>

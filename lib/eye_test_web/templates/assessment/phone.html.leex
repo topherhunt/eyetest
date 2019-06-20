@@ -1,0 +1,25 @@
+<%= case @display do %>
+
+  <% "blank" -> %>
+    <div>...</div>
+
+  <% "get_ready" -> %>
+    <h1>Get ready</h1>
+    <p>Get into position, then press the button to start your test.</p>
+    <div class="text-center"><%= link "I'm ready", to: "#", class: "btn btn-primary", phx_click: "start_test" %></div>
+
+  <% "countdown" -> %>
+    <p>3... 2... 1...</p>
+
+  <% "letter_buttons" -> %>
+    <div style="position: relative;">
+      <%= for letter <- ~w(D E F L O P S T Z) do %>
+        <div style="float: left; width: 33%; padding: 10px;"><%= link letter, to: "#", class: "btn btn-dark", style: "font-size: 33vw; line-height: 1; display: block; width: 100%;", phx_click: "button_pressed", phx_value: letter %></div>
+      <% end %>
+    </div>
+
+  <% "done" -> %>
+    <h1 class="text-success">You're done!</h1>
+    <p>Goob job! Go back to your computer and check out your results.</p>
+
+<% end %>

@@ -1,0 +1,21 @@
+<%= case @step do %>
+
+  <% "settings" -> %>
+    <%= render "_settings.html",
+      step: @step,
+      all_locations: @all_locations,
+      settings_changeset: @settings_changeset %>
+
+  <% "connect_phone" -> %>
+    <%= render "_connect_phone.html", assessment: @assessment %>
+
+  <% "get_ready" -> %>
+    <%= render "_get_ready.html" %>
+
+  <% "questions" -> %>
+    <%= render "_questions.html", current_question: @current_question %>
+
+  <% "complete" -> %>
+    <%= render "_complete.html", assessment: @assessment %>
+
+<% end %>

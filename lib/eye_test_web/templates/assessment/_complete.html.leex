@@ -1,0 +1,9 @@
+<div class="u-centered-800">
+  <h3 class="text-success">You're done!</h3>
+
+  <p>Good job! Click the button below to go to the results page.</p>
+
+  <p class="text-center">
+    <%= link "See results", to: Routes.assessment_path(EyeTestWeb.Endpoint, :show, @assessment), class: "btn btn-primary" %>
+  </p>
+</div>

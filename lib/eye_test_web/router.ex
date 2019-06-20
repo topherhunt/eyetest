@@ -6,6 +6,7 @@ defmodule EyeTestWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :load_current_user
@@ -30,6 +31,11 @@ defmodule EyeTestWeb.Router do
     end
 
     resources "/locations", LocationController
+
+    get "/assessments", AssessmentController, :index
+    get "/assessments/start", AssessmentController, :start
+    get "/assessments/phone/:assessment_uuid", AssessmentController, :phone
+    get "/assessments/:id", AssessmentController, :show
   end
 
   # Other scopes may use custom stacks.

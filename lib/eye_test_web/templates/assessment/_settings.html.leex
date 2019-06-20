@@ -1,0 +1,105 @@
+<div class="u-centered-800">
+  <h3>1. Settings</h3>
+
+  <%= form_for @settings_changeset, "#", [phx_submit: "submit_settings"], fn f -> %>
+    <div class="form-group">
+      <%= label f, :location_id do %>
+        Location
+        <div class="em small">Select one of your normal locations, or <%= link "add a new one", to: Routes.location_path(EyeTestWeb.Endpoint, :new) %>.</div>
+      <% end %>
+      <%= select f, :location_id, Enum.map(@all_locations, & {&1.name, &1.id}), class: "form-control" %>
+      <%= error_tag f, :location_id %>
+    </div>
+
+    <div class="form-group">
+      Which eye?
+      <div class="em small text-warning">Cover up the other eye now so you don't forget to!</div>
+
+      <div>
+        <label>
+          <%= radio_button f, :which_eye, "left" %>
+          left
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :which_eye, "right" %>
+          right
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :which_eye, "both" %>
+          both
+        </label>
+      </div>
+
+      <% IO.inspect(@settings_changeset, label: "The settings changeset") %>
+      <%= error_tag f, :which_eye %>
+    </div>
+
+    <div class="form-group">
+      How much light is there in the room right now?
+      <div class="em small">Your test results might be affected if the room is extremely bright or extremely dark because these conditions can lead to straining your eyes, even if you don't consciously notice it.</div>
+
+      <div>
+        <label>
+          <%= radio_button f, :current_light_level, "1" %>
+          1 - very dark: it's so dark that the computer screen is a bit glaring
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :current_light_level, "2" %>
+          2 - dark: the computer screen is the brightest light source in the room, but it's not distracting
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :current_light_level, "3" %>
+          3 - balanced: normal light level, this is what I'm used to
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :current_light_level, "4" %>
+          4 - bright: other light sources are brighter than the computer screen, but it's OK
+        </label>
+      </div>
+      <div>
+        <label>
+          <%= radio_button f, :current_light_level, "5" %>
+          5 - very bright: other light sources are distractingly bright
+        </label>
+      </div>
+
+      <%= error_tag f, :current_light_level %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, :personal_notes do %>
+        Personal notes
+        <div class="em small">
+          Note any observations that might help you notice patterns in when your vision improves or degrades. Consider:
+          <ul class="mb-0">
+            <li>What time of day is it?</li>
+            <li>How much sleep did you get last night?</li>
+            <li>How does your body feel right now? Your head?</li>
+            <li>How are you feeling? Stressful day? Fun day?</li>
+            <li>When was the last time you went running?</li>
+          </ul>
+        </div>
+      <% end %>
+      <%= textarea f, :personal_notes, class: "form-control", rows: 5, placeholder: "Add notes here..." %>
+      <%= error_tag f, :personal_notes %>
+    </div>
+
+    <div class="form-group">
+      <%= if @settings_changeset.action do %>
+        <div class="u-form-error">Please see error messages above.</div>
+      <% end %>
+
+      <%= submit "Next", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,19 @@
+<h1>My test history</h1>
+
+<table class="table">
+  <tr>
+    <th>When</th>
+    <th>Eye</th>
+    <th colspan="2" class="text-center">Scores</th>
+    <th></th>
+  </tr>
+  <%= for a <- @assessments do %>
+    <tr>
+      <td><%= a.completed_at %></td>
+      <td><%= a.which_eye %></td>
+      <td><%= Float.round(a.scores["avg_smallest_3_correct"], 2) %></td>
+      <td><%= Float.round(a.scores["edge_size"], 2) %></td>
+      <td><%= link "results", to: Routes.assessment_path(@conn, :show, a) %></td>
+    </tr>
+  <% end %>
+</table>

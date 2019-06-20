@@ -1,0 +1,70 @@
+<h1>Results from <%= @assessment.completed_at %></h1>
+
+<div class="grid-1-1">
+
+  <div>
+    <h3>Basic info</h3>
+    <table class="table">
+      <tr>
+        <th>Location</th>
+        <td><%= @assessment.location.name %></td>
+      </tr>
+      <tr>
+        <th>Which eye?</th>
+        <td><%= @assessment.which_eye %></td>
+      </tr>
+      <tr>
+        <th>Cur. light level</th>
+        <td><%= @assessment.current_light_level %></td>
+      </tr>
+      <tr>
+        <th>Personal notes</th>
+        <td><%= @assessment.personal_notes %></td>
+      </tr>
+      <tr>
+        <th>Started</th>
+        <td><%= @assessment.started_at %></td>
+      </tr>
+      <tr>
+        <th>Completed</th>
+        <td>
+          <%= @assessment.completed_at %>
+          <% secs = Timex.diff(@assessment.completed_at, @assessment.started_at, :seconds) %>
+          (<%= div(secs, 60) %>m <%= rem(secs, 60) %>s)
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="pt-3">Scores</h3>
+    <table class="table">
+      <tr>
+        <th>Avg. smallest 3 correct</th>
+        <td><%= Float.round(@assessment.scores["avg_smallest_3_correct"], 2) %> %</td>
+      </tr>
+      <tr>
+        <th>Edge size</th>
+        <td><%= Float.round(@assessment.scores["edge_size"], 2) %> %</td>
+      </tr>
+    </table>
+  </div>
+
+  <div>
+    <h3>Questions</h3>
+    <table class="table">
+      <tr>
+        <th>Size</th>
+        <th>Actual</th>
+        <th>Guess</th>
+      </tr>
+      <%= for question <- @assessment.questions do %>
+        <% class = if question["correct"], do: "text-success", else: "text-danger" %>
+        <tr>
+          <td class="text-right"><%= question["size"] %>%</td>
+          <td class="text-center"><%= question["actual"] %></td>
+          <td class="text-center <%= class %>"><%= question["guess"] %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+</div>

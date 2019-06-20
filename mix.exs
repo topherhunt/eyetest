@@ -51,7 +51,8 @@ defmodule EyeTest.MixProject do
       {:bamboo, "~> 1.2"},
       {:bamboo_smtp, "~> 1.7"},
       {:hound, "~> 1.0", only: :test},
-      {:logger_file_backend, "~> 0.0", only: :test}
+      {:logger_file_backend, "~> 0.0", only: :test},
+      {:eqrcode, "~> 0.1.6"}
     ]
   end
 

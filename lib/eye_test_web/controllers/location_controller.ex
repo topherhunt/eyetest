@@ -19,7 +19,7 @@ defmodule EyeTestWeb.LocationController do
     location_params = Map.put(location_params, "user_id", conn.assigns.current_user.id)
 
     case Location.insert(location_params) do
-      {:ok, location} ->
+      {:ok, _location} ->
         conn
         |> put_flash(:info, "Location created.")
         |> redirect(to: Routes.location_path(conn, :index))
@@ -38,7 +38,7 @@ defmodule EyeTestWeb.LocationController do
 
   def update(conn, %{"location" => location_params}) do
     case Location.update(conn.assigns.location, location_params) do
-      {:ok, location} ->
+      {:ok, _location} ->
         conn
         |> put_flash(:info, "Location updated.")
         |> redirect(to: Routes.location_path(conn, :index))

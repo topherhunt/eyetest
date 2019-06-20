@@ -12,7 +12,7 @@
 
   <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <%= link "Eye Test", to: "#", class: "navbar-brand" %>
+      <%= link "Eye Test", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar-content">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,6 +20,8 @@
         <ul class="navbar-nav mr-auto"></ul>
         <ul class="navbar-nav">
           <%= if @current_user do %>
+            <li class="nav-item"><%= link "Run a test", to: Routes.assessment_path(@conn, :start), class: "nav-link text-success strong" %></li>
+            <li class="nav-item"><%= link "History", to: Routes.assessment_path(@conn, :index), class: "nav-link" %></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                 <i class="icon">face</i> <span class="caret"></span>

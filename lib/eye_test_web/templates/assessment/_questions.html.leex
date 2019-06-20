@@ -1,0 +1,27 @@
+<%= case @current_question.step do %>
+  <% "countdown" -> %>
+    <h1 class="text-center text-warning" style="padding-top: 25%;"><i class="icon">hourglass_full</i></h1>
+
+  <% "reveal" -> %>
+    <div style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;">
+      <div style="padding-top: 28%; line-height: 0; text-align: center; font-size: <%= @current_question.size %>vh;">
+        <%= @current_question.actual %>
+      </div>
+    </div>
+
+  <% "result" -> %>
+    <%= cond do %>
+      <% @current_question.correct -> %>
+        <h1 class="text-center text-success" style="padding-top: 25%;"><i class="icon">check_circle_outline</i></h1>
+
+      <% @current_question.guess != "" -> %>
+        <h1 class="text-center text-danger" style="padding-top: 25%;"><i class="icon">clear</i></h1>
+
+      <% @current_question.guess == "" -> %>
+        <h1 class="text-center text-danger" style="padding-top: 25%;">Timed out!</h1>
+    <% end %>
+
+<% end %>
+
+  </div>
+</div>

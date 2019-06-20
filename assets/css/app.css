@@ -1,7 +1,9 @@
 /* This file is for your main application css. */
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../deps/phoenix_live_view/assets/css/live_view.css";
 @import "layout.scss";
+@import "grid.scss";
 @import "overrides.scss";
 @import "utilities.scss";
 @import "icons.css";

@@ -33,7 +33,7 @@
               </div>
             </li>
           <% else %>
-            <li class="nav-item"><%= link "Log in", to: Routes.auth_path(@conn, :login), class: "nav-link" %></li>
+            <li class="nav-item"><%= link "Log in / sign up", to: Routes.auth_path(@conn, :login), class: "nav-link" %></li>
           <% end %>
         </ul>
       </div>

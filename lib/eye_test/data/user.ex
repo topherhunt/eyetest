@@ -21,6 +21,7 @@ defmodule EyeTest.Data.User do
   # Public
   #
 
+  # TODO: Change api to: get!, first, all, count
   def one(filters \\ []),    do: __MODULE__ |> apply_filters(filters) |> Repo.one()
   def one!(filters \\ []),   do: __MODULE__ |> apply_filters(filters) |> Repo.one!()
   def first(filters \\ []),  do: __MODULE__ |> apply_filters(filters) |> Repo.first()

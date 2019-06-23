@@ -1,11 +1,17 @@
-<h1>Title</h1>
+<div class="u-centered-800">
+  <h1>Eye Test</h1>
 
-<div class="alert alert-success">An alert</div>
+  <p>Eye Test is an app for measuring your vision quality. It makes it as easy as possible for you to collect objective data on how good your sight is, to help you notice patterns as your vision varies from day to day and week to week.</p>
 
-<div class="u-card">
-  A div with the "u-card" class
+  <p><strong>TODO: Chart screenshot here</strong></p>
+
+  <p>Features:</p>
+
+  <ul>
+    <li>Free to use</li>
+    <li>Fast, efficient testing process</li>
+    <li>Use your phone as the "remote" to answer test questions from a distance</li>
+    <li>Chart your vision progression over time</li>
+    <li>Note observations about your health, sleep, energy level, etc. to help you notice patterns later on</li>
+  </ul>
 </div>
-
-<div class="u-card js-fade-on-click">Jquery test: click me to fade</div>
-
-<h3>An icon: <i class="icon">face</i></h3>

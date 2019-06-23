@@ -21,6 +21,11 @@
         <th>Personal notes</th>
         <td><%= @assessment.personal_notes %></td>
       </tr>
+
+      <tr>
+        <td><strong>Score</strong> (smallest correct)</td>
+        <td><%= @assessment.scores["smallest_correct"] %>%</td>
+      </tr>
       <tr>
         <th>Started</th>
         <td><%= @assessment.started_at %></td>
@@ -32,18 +37,6 @@
           <% secs = Timex.diff(@assessment.completed_at, @assessment.started_at, :seconds) %>
           (<%= div(secs, 60) %>m <%= rem(secs, 60) %>s)
         </td>
-      </tr>
-    </table>
-
-    <h3 class="pt-3">Scores</h3>
-    <table class="table">
-      <tr>
-        <th>Avg. smallest 3 correct</th>
-        <td><%= Float.round(@assessment.scores["avg_smallest_3_correct"], 2) %> %</td>
-      </tr>
-      <tr>
-        <th>Edge size</th>
-        <td><%= Float.round(@assessment.scores["edge_size"], 2) %> %</td>
       </tr>
     </table>
   </div>

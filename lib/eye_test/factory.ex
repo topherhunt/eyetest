@@ -52,8 +52,7 @@ defmodule EyeTest.Factory do
 
   def build_scores(params \\ %{}) do
     %{
-      "avg_smallest_3_correct" => params[:avg_smallest_3_correct] || 41.9,
-      "edge_size" => params[:edge_size] || 40.3
+      "smallest_correct" => params[:smallest_correct] || 41.9,
     }
   end
 

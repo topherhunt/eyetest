@@ -13,7 +13,7 @@ $(document).ready(function() {
           id: i.id,
           which_eye: i.which_eye,
           x: Date.parse(i.completed_at),
-          y: i.edge_size
+          y: i.score
         }
       })
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
         type: "line"
       },
       title: {
-        text: "Vision quality"
+        text: "Your results across all time"
       },
       xAxis: {
         type: "datetime"

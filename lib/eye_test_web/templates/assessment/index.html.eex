@@ -6,15 +6,14 @@
       <tr>
         <th>When</th>
         <th>Eye</th>
-        <th colspan="2" class="text-center">Scores</th>
+        <th>Score</th>
         <th></th>
       </tr>
       <%= for a <- @assessments do %>
         <tr>
           <td><%= a.completed_at %></td>
           <td><%= a.which_eye %></td>
-          <td><%= Float.round(a.scores["avg_smallest_3_correct"], 2) %></td>
-          <td><%= Float.round(a.scores["edge_size"], 2) %></td>
+          <td><%= a.scores["smallest_correct"] %></td>
           <td><%= link "results", to: Routes.assessment_path(@conn, :show, a) %></td>
         </tr>
       <% end %>
@@ -22,10 +21,9 @@
   </div>
 
   <div>
-    CHART
     <%
     chart_data = Enum.map(@assessments, fn(a) ->
-      %{id: a.id, which_eye: a.which_eye, completed_at: a.completed_at, edge_size: Float.round(a.scores["edge_size"], 2)}
+      %{id: a.id, which_eye: a.which_eye, completed_at: a.completed_at, score: a.scores["smallest_correct"]}
     end)
     # partitioned = Enum.group_by(chart_data, & &1.which_eye) |> Jason.encode!()
     # IO.inspect(partitioned)

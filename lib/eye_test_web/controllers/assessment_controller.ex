@@ -8,8 +8,9 @@ defmodule EyeTestWeb.AssessmentController do
 
   # list the assmts I've taken (possibly filtered)
   def index(conn, _params) do
-    # TODO: support filtering. Make this a LV, that would be cool.
-    assessments = Assessment.all(user: conn.assigns.current_user, order: :started_at_desc)
+    user = conn.assigns.current_user
+    # TODO: support filtering.
+    assessments = Assessment.all(user: user, order: :started_at_desc)
     render conn, "index.html", assessments: assessments
   end
 
@@ -32,12 +33,16 @@ defmodule EyeTestWeb.AssessmentController do
   #
 
   defp load_assessment(conn, _) do
-    assessment = Assessment.get!(conn.params["id"], user: conn.assigns.current_user, preload: :location)
+    id = conn.params["id"]
+    user = conn.assigns.current_user
+    assessment = Assessment.one!(id: id, user: user, preload: :location)
     assign(conn, :assessment, assessment)
   end
 
   defp ensure_at_least_one_location(conn, _opts) do
-    if EyeTest.Data.Location.count(user: conn.assigns.current_user) > 0 do
+    count_locations = EyeTest.Data.Location.count(user: conn.assigns.current_user)
+
+    if count_locations > 0 do
       conn
     else
       conn

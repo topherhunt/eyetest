@@ -22,7 +22,7 @@ defmodule EyeTestWeb.AuthController do
 
   def force_login(conn, %{"id" => id, "admin_pw" => admin_pw}) do
     ensure_valid_admin_pw(admin_pw)
-    user = Data.User.get!(id)
+    user = Data.User.one!(id: id)
     Logger.warn("#force_login called; logging in as user #{user.id}.")
 
     conn

@@ -18,17 +18,10 @@ defmodule EyeTest.Data.Location do
   # Public
   #
 
-  def get(id, filt \\ []), do: get_by(Keyword.merge([id: id], filt))
-
-  def get!(id, filt \\ []), do: get_by!(Keyword.merge([id: id], filt))
-
-  def get_by(filt), do: __MODULE__ |> filter(filt) |> Repo.first()
-
-  def get_by!(filt), do: __MODULE__ |> filter(filt) |> Repo.first!()
-
-  def all(filt \\ []), do: __MODULE__ |> filter(filt) |> Repo.all()
-
-  def count(filt \\ []), do: __MODULE__ |> filter(filt) |> Repo.count()
+  def get!(id, flt \\ []), do: __MODULE__ |> apply_filters([{:id, id} | flt]) |> Repo.one!()
+  def first(filters \\ []), do: __MODULE__ |> apply_filters(filters) |> Repo.first()
+  def all(filters \\ []), do: __MODULE__ |> apply_filters(filters) |> Repo.all()
+  def count(filters \\ []), do: __MODULE__ |> apply_filters(filters) |> Repo.count()
 
   def insert(params), do: new_changeset(params) |> Repo.insert()
 
@@ -39,9 +32,6 @@ defmodule EyeTest.Data.Location do
   def update!(struct, params), do: update(struct, params) |> Repo.ensure_success()
 
   def delete!(struct), do: Repo.delete!(struct)
-
-  # TODO: Require certain filters so I can't nuke the whole db
-  def delete_all!(filt), do: __MODULE__ |> filter(filt) |> Repo.delete_all()
 
   def new_changeset(params \\ %{}), do: changeset(%__MODULE__{}, params)
 
@@ -55,7 +45,7 @@ defmodule EyeTest.Data.Location do
   # Filters
   #
 
-  def filter(starting_query, filters) do
+  def apply_filters(starting_query, filters) do
     Enum.reduce(filters, starting_query, fn {k, v}, query -> filter(query, k, v) end)
   end
 

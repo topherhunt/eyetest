@@ -4,7 +4,7 @@ defmodule EyeTest.Repo.Migrations.CreateAssessments do
   def change do
     create table(:assessments) do
       add :user_id, references(:users, on_delete: :delete_all)
-      add :location_id, references(:users, on_delete: :nilify_all)
+      add :location_id, references(:locations, on_delete: :nilify_all)
       # "left", "right", "both"
       add :which_eye, :string
       # 1 to 5

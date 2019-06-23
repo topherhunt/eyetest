@@ -1,7 +1,12 @@
 <%= case @display do %>
 
+  <% "connecting" -> %>
+    <div class="text-warning em test-page-phone-connecting">
+      Trying to connect to your test session...
+    </div>
+
   <% "blank" -> %>
-    <div>...</div>
+    <div></div>
 
   <% "get_ready" -> %>
     <h1>Get ready</h1>

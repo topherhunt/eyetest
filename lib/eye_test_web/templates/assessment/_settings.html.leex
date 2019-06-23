@@ -1,4 +1,4 @@
-<div class="u-centered-800">
+<div class="u-centered-800 test-assessment-settings-page">
   <h3>1. Settings</h3>
 
   <%= form_for @settings_changeset, "#", [phx_submit: "submit_settings"], fn f -> %>
@@ -34,7 +34,6 @@
         </label>
       </div>
 
-      <% IO.inspect(@settings_changeset, label: "The settings changeset") %>
       <%= error_tag f, :which_eye %>
     </div>
 

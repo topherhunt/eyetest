@@ -22,9 +22,9 @@ defmodule EyeTest.AssessmentScreenLiveview do
       # For the settings page
       all_locations: EyeTest.Data.Location.all(user: assessment.user, order: :name),
       # All questions we've gone through so far. Will eventually be saved to the assessment.
-      completed_questions: [],
-      # The question we're currently presenting (only relevant during the "questions" step)
-      current_question: nil
+      questions: [],
+      # The question we're currently presenting
+      this_question: nil
     }
 
     socket = assign(socket, initial_state)
@@ -79,29 +79,27 @@ defmodule EyeTest.AssessmentScreenLiveview do
 
   def handle_info("start_test" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
-    assessment = Map.merge(socket.assigns.assessment, %{started_at: Timex.now()})
-    socket = assign(socket, %{assessment: assessment, step: "questions"})
-    {:noreply, prep_current_question(socket)}
+    {:noreply, start_assessment(socket)}
   end
 
   def handle_info("reveal_question" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
-    current_q = socket.assigns.current_question |> Map.put(:step, "reveal")
+    this_question = socket.assigns.this_question |> Map.put(:step, "reveal")
 
     broadcast_to_phone(socket, {"display", "letter_buttons"})
-    :timer.send_after(5000, self(), {"timeout_question", current_q.uuid})
-    {:noreply, assign(socket, :current_question, current_q)}
+    :timer.send_after(5000, self(), {"question_timed_out", this_question.uuid})
+    {:noreply, assign(socket, :this_question, this_question)}
   end
 
   def handle_info({"button_pressed", guess} = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
-    {:noreply, register_question_response(socket, guess)}
+    {:noreply, handle_question_response(socket, guess)}
   end
 
-  def handle_info({"timeout_question", uuid} = msg, socket) do
-    if uuid == socket.assigns.current_question.uuid do
+  def handle_info({"question_timed_out", uuid} = msg, socket) do
+    if uuid == socket.assigns.this_question.uuid do
       log socket, "Received msg #{inspect(msg)}. Question time expired."
-      {:noreply, register_question_response(socket, "")}
+      {:noreply, handle_question_response(socket, "")}
     else
       log socket, "Received msg #{inspect(msg)}. Ignoring."
       {:noreply, socket}
@@ -111,23 +109,15 @@ defmodule EyeTest.AssessmentScreenLiveview do
   def handle_info("next_question" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
 
-    current_question = Map.drop(socket.assigns.current_question, [:step, :uuid])
-    completed_questions = socket.assigns.completed_questions ++ [current_question]
-    socket = assign(socket, :completed_questions, completed_questions)
-    log socket, "Completed questions so far: #{inspect(completed_questions)}"
+    this_question = Map.drop(socket.assigns.this_question, [:step, :uuid])
+    questions = socket.assigns.questions ++ [this_question]
+    socket = assign(socket, :questions, questions)
+    log socket, "Completed questions so far: #{inspect(questions)}"
 
     if test_should_continue?(socket) do
-      {:noreply, prep_current_question(socket)}
+      {:noreply, prep_this_question(socket)}
     else
-      # TODO: Extract to a helper function?
-      assessment =
-        socket.assigns.assessment
-        |> Map.put(:completed_at, Timex.now())
-        |> Map.put(:questions, completed_questions)
-        |> EyeTest.Data.compute_scores()
-        |> Map.from_struct()
-        |> Assessment.insert!()
-
+      assessment = complete_assessment(socket)
       broadcast_to_phone(socket, {"display", "done"})
       {:noreply, assign(socket, %{assessment: assessment, step: "complete"})}
     end
@@ -152,30 +142,33 @@ defmodule EyeTest.AssessmentScreenLiveview do
     Phoenix.PubSub.broadcast(EyeTest.PubSub, channel, event)
   end
 
-  defp prep_current_question(socket) do
+  #
+  # Assessment workflow
+  #
+
+  def start_assessment(socket) do
+    assessment = Map.put(socket.assigns.assessment, :started_at, Timex.now())
+
+    socket
+    |> assign(:assessment, assessment)
+    |> assign(:step, "questions")
+    |> prep_this_question()
+  end
+
+  defp prep_this_question(socket) do
+    question = generate_question(socket)
     broadcast_to_phone(socket, {"display", "countdown"})
     :timer.send_after(100, self(), "reveal_question")
-    assign(socket, %{current_question: generate_question(socket)})
+    assign(socket, %{this_question: question})
   end
 
   defp generate_question(socket) do
-    last_q = List.last(socket.assigns.completed_questions) || %{size: 100.0, correct: false}
+    last_q = List.last(socket.assigns.questions) || %{size: 100.0, correct: false}
     size = if last_q.correct, do: last_q.size * 0.95, else: last_q.size
     size = Float.round(size, 2)
     actual = random_letter()
     uuid = EyeTest.Factory.random_uuid()
     %{uuid: uuid, size: size, actual: actual, step: "countdown"}
-  end
-
-  defp register_question_response(socket, guess) do
-    current_q = socket.assigns.current_question
-    current_q = Map.put(current_q, :guess, guess)
-    current_q = Map.put(current_q, :correct, guess == current_q.actual)
-    current_q = Map.put(current_q, :step, "result")
-
-    broadcast_to_phone(socket, {"display", "blank"})
-    :timer.send_after(500, self(), "next_question")
-    assign(socket, :current_question, current_q)
   end
 
   defp random_letter do
@@ -184,9 +177,33 @@ defmodule EyeTest.AssessmentScreenLiveview do
     Enum.random(~w(D E F L O P S T Z))
   end
 
+  defp handle_question_response(socket, guess) do
+    this_question = record_answer(socket.assigns.this_question, guess)
+
+    broadcast_to_phone(socket, {"display", "blank"})
+    :timer.send_after(500, self(), "next_question")
+    assign(socket, :this_question, this_question)
+  end
+
+  defp record_answer(question, guess) do
+    question
+    |> Map.put(:guess, guess)
+    |> Map.put(:correct, guess == question.actual)
+    |> Map.put(:step, "result")
+  end
+
   defp test_should_continue?(socket) do
-    completed_questions = socket.assigns.completed_questions
-    num_false = Enum.count(completed_questions, fn(q) -> q.correct == false end)
+    questions = socket.assigns.questions
+    num_false = Enum.count(questions, fn(q) -> q.correct == false end)
     num_false < 5
+  end
+
+  defp complete_assessment(socket) do
+    socket.assigns.assessment
+    |> Map.put(:completed_at, Timex.now())
+    |> Map.put(:questions, socket.assigns.questions)
+    |> EyeTest.Data.compute_scores()
+    |> Map.from_struct()
+    |> Assessment.insert!()
   end
 end

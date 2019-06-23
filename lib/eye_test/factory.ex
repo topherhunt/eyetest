@@ -1,26 +1,61 @@
 # I was using ExMachina but found these hand-rolled factories simple to set up
 # and more transparent vis-a-vis Ecto association handling.
 defmodule EyeTest.Factory do
+  alias EyeTest.Data.{User, Location, Assessment}
 
-  # def insert_user(params \\ %{}) do
-  #   assert_no_keys_except(params, [:full_name, :email, :uuid])
-  #   uuid = random_uuid()
+  def insert_user(params \\ %{}) do
+    assert_no_keys_except(params, [:name, :email])
+    uuid = random_uuid()
 
-  #   Accounts.insert_user!(%{
-  #     full_name: params[:full_name] || "User #{uuid}",
-  #     email: params[:email] || "user_#{uuid}@example.com",
-  #     uuid: params[:uuid] || random_uuid()
-  #   })
-  # end
+    User.insert!(%{
+      name: params[:name] || "User #{uuid}",
+      email: params[:email] || "user_#{uuid}@example.com"
+    })
+  end
 
-  # def insert_project(params \\ %{}) do
-  #   assert_no_keys_except(params, [:name, :uuid])
+  def insert_location(params \\ %{}) do
+    assert_no_keys_except(params, [:user_id, :name, :cm_from_screen])
+    uuid = random_uuid()
 
-  #   Projects.insert_project!(%{
-  #     name: params[:name] || "Project #{random_uuid()}",
-  #     uuid: params[:uuid] || random_uuid()
-  #   })
-  # end
+    Location.insert!(%{
+      user_id: params[:user_id] || insert_user().id,
+      name: params[:name] || "User #{uuid}",
+      cm_from_screen: params[:cm_from_screen] || 200
+    })
+  end
+
+  def insert_assessment(params \\ %{}) do
+    assert_no_keys_except(params, [:user_id, :location_id, :which_eye, :current_light_level, :personal_notes, :other_notes, :questions, :scores, :started_at, :completed_at])
+
+    Assessment.insert!(%{
+      user_id: params[:user_id] || insert_user().id,
+      location_id: params[:location_id] || insert_location().id,
+      which_eye: params[:which_eye] || "left",
+      current_light_level: params[:current_light_level] || 3,
+      personal_notes: params[:personal_notes],
+      other_notes: params[:other_notes],
+      questions: params[:questions] || [build_question()],
+      scores: params[:scores] || build_scores(),
+      started_at: params[:started_at] || Timex.shift(Timex.now(), minutes: -20),
+      completed_at: params[:completed_at] || Timex.shift(Timex.now(), minutes: -5)
+    })
+  end
+
+  def build_question(params \\ %{}) do
+    %{
+      "size" => params[:size] || 45.3,
+      "actual" => params[:actual] || "E",
+      "guess" => params[:guess] || "F",
+      "correct" => Map.get(params, :correct, true)
+    }
+  end
+
+  def build_scores(params \\ %{}) do
+    %{
+      "avg_smallest_3_correct" => params[:avg_smallest_3_correct] || 41.9,
+      "edge_size" => params[:edge_size] || 40.3
+    }
+  end
 
   def random_uuid do
     pool = String.codepoints("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789")

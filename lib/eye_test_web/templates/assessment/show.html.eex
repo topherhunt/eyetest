@@ -1,6 +1,6 @@
 <h1>Results from <%= @assessment.completed_at %></h1>
 
-<div class="grid-1-1">
+<div class="grid-1-1 test-page-assessment-<%= @assessment.id %>-results">
 
   <div>
     <h3>Basic info</h3>

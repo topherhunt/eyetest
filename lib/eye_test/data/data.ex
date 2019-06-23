@@ -14,8 +14,8 @@ defmodule EyeTest.Data do
     edge_size = (smallest_correct + largest_incorrect) / 2
 
     scores = %{
-      avg_smallest_3_correct: Float.round(avg_smallest_3_correct, 2),
-      edge_size: Float.round(edge_size, 2)
+      "avg_smallest_3_correct" => Float.round(avg_smallest_3_correct, 2),
+      "edge_size" => Float.round(edge_size, 2)
     }
 
     Map.put(assessment, :scores, scores)

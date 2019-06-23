@@ -13,7 +13,7 @@
     <%= render "_get_ready.html" %>
 
   <% "questions" -> %>
-    <%= render "_questions.html", current_question: @current_question %>
+    <%= render "_questions.html", this_question: @this_question %>
 
   <% "complete" -> %>
     <%= render "_complete.html", assessment: @assessment %>

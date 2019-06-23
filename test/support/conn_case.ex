@@ -19,7 +19,9 @@ defmodule EyeTestWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
+      import EyeTestWeb.ConnHelpers
       alias EyeTestWeb.Router.Helpers, as: Routes
+      alias EyeTest.Factory
 
       # The default endpoint for testing
       @endpoint EyeTestWeb.Endpoint

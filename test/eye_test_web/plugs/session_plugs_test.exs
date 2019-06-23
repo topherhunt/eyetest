@@ -1,7 +1,7 @@
 defmodule EyeTestWeb.SessionPlugsTest do
   use EyeTestWeb.ConnCase, async: true
   alias EyeTestWeb.SessionPlugs
-  alias EyeTest.Orgs
+  alias EyeTest.Data.User
 
   defp put_session_expiration(conn, adjustment) do
     expiry = Timex.now() |> Timex.shift(adjustment) |> Timex.format!("{ISO:Extended}")
@@ -59,20 +59,6 @@ defmodule EyeTestWeb.SessionPlugsTest do
     end
   end
 
-  describe "#must_be_logged_in" do
-    test "does nothing if current_user exists", %{conn: conn} do
-      conn = assign(conn, :current_user, "something truthy")
-      conn = SessionPlugs.must_be_logged_in(conn, [])
-      refute conn.halted
-    end
-
-    test "redirects and halts if no current_user", %{conn: conn} do
-      conn = SessionPlugs.must_be_logged_in(conn, [])
-      assert redirected_to(conn) == Routes.home_path(conn, :index)
-      assert conn.halted
-    end
-  end
-
   describe "#login!" do
     test "logs in this user", %{conn: conn} do
       user = Factory.insert_user()
@@ -81,7 +67,7 @@ defmodule EyeTestWeb.SessionPlugsTest do
       conn = SessionPlugs.login!(conn, user)
       assert conn.assigns.current_user.id == user.id
       assert get_session(conn, :user_id) == user.id
-      reloaded_user = Orgs.get_user!(user.id)
+      reloaded_user = User.one!(id: user.id)
       assert reloaded_user.last_signed_in_at != nil
     end
   end

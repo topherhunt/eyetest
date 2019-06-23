@@ -17,6 +17,7 @@ defmodule EyeTest.DataCase do
   using do
     quote do
       alias EyeTest.Repo
+      alias EyeTest.Factory
 
       import Ecto
       import Ecto.Changeset

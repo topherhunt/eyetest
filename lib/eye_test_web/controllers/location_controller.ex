@@ -6,7 +6,8 @@ defmodule EyeTestWeb.LocationController do
   plug :load_location when action in [:show, :edit, :update, :delete]
 
   def index(conn, _params) do
-    locations = Location.all(user: conn.assigns.current_user, order: :name)
+    user = conn.assigns.current_user
+    locations = Location.all(user: user, order: :name)
     render conn, "index.html", locations: locations
   end
 
@@ -63,7 +64,8 @@ defmodule EyeTestWeb.LocationController do
   #
 
   defp load_location(conn, _) do
-    location = Location.get!(conn.params["id"], user: conn.assigns.current_user)
+    user = conn.assigns.current_user
+    location = Location.get!(conn.params["id"], user: user)
     assign(conn, :location, location)
   end
 end

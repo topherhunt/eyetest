@@ -8,11 +8,11 @@ defmodule EyeTest.Data.Services.FindOrCreateUserFromAuth do
     email = auth.info.email || blowup(auth, "email is required")
 
     cond do
-      user = User.get_by(auth0_uid: uid) ->
+      user = User.one(auth0_uid: uid) ->
         Logger.info "Auth: Logged in existing user #{user.id} (#{user.email}) by auth0_uid #{uid}."
         user
 
-      user = User.get_by(email: email) ->
+      user = User.one(email: email) ->
         ensure_user_doesnt_have_auth0_uid(user, auth)
         user = User.update!(user, %{auth0_uid: uid})
         Logger.info "Auth: Mapped existing user #{user.id} (#{user.email}) to auth0_uid #{uid}."

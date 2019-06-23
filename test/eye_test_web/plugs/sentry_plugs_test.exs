@@ -20,7 +20,7 @@ defmodule EyeTestWeb.SentryPlugsTest do
     test "redirects and halts if no current_user", %{conn: conn} do
       conn = SentryPlugs.ensure_logged_in(conn, [])
 
-      assert redirected_to(conn) == Routes.home_path(conn, :index)
+      assert redirected_to(conn) == Routes.page_path(conn, :index)
       assert conn.halted
     end
   end
@@ -33,11 +33,11 @@ defmodule EyeTestWeb.SentryPlugsTest do
     end
 
     test "redirects and halts if current_user is present", %{conn: conn} do
-      conn = assign(conn, :current_user, %EyeTest.Accounts.User{id: 1})
+      conn = assign(conn, :current_user, %EyeTest.Data.User{id: 1})
 
       conn = SentryPlugs.ensure_not_logged_in(conn, [])
 
-      assert redirected_to(conn) == Routes.home_path(conn, :index)
+      assert redirected_to(conn) == Routes.page_path(conn, :index)
       assert conn.halted
     end
   end

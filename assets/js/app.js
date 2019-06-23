@@ -21,6 +21,7 @@ import "bootstrap"
 // import socket from "./socket"
 
 import "./utilities"
+import "./charts"
 
 // Init LiveView
 import LiveSocket from "phoenix_live_view"

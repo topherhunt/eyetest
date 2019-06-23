@@ -3,7 +3,8 @@ defmodule EyeTest.AssessmentPhoneLiveview do
   require Logger
 
   def mount(session, socket) do
-    socket = assign(socket, %{assessment_uuid: session.assessment_uuid, display: "blank"})
+    uuid = session.assessment_uuid
+    socket = assign(socket, %{assessment_uuid: uuid, display: "connecting"})
 
     if connected?(socket) do
       log socket, "Initialized."

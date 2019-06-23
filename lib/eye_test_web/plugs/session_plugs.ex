@@ -74,7 +74,7 @@ defmodule EyeTestWeb.SessionPlugs do
   defp parse_time(string), do: Timex.parse!(string, "{ISO:Extended}")
 
   defp load_user_from_session(conn) do
-    EyeTest.Data.User.get_by(id: get_session(conn, :user_id))
+    EyeTest.Data.User.one(id: get_session(conn, :user_id))
   end
 
   defp set_assigned_user(conn, user) do

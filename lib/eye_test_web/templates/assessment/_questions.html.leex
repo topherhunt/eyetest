@@ -1,36 +1,30 @@
-<%= case @this_question.step do %>
-  <% "countdown" -> %>
-    <h1 class="text-center text-warning test-assessment-question-countdown" style="padding-top: 25%;">
-      <i class="icon">hourglass_full</i>
-    </h1>
+<div style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;"
+  class="text-center test-assessment-question-reveal"
+  data-test-letter="<%= @this_question.actual %>"
+  data-test-question-uuid="<%= @this_question.uuid %>"
+>
+  <div style="padding-top: 28%; line-height: 0; font-size: <%= @this_question.size %>vh;">
+    <%= if @this_question[:guess] == nil do %>
+      <%= @this_question.actual %>
+    <% else %>
 
-  <% "reveal" -> %>
-    <div style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;"
-      class="test-assessment-question-reveal"
-      data-test-letter="<%= @this_question.actual %>"
-      data-test-question-uuid="<%= @this_question.uuid %>"
-    >
-      <div style="padding-top: 28%; line-height: 0; text-align: center; font-size: <%= @this_question.size %>vh;">
-        <%= @this_question.actual %>
-      </div>
-    </div>
+      <%= cond do %>
+        <% @this_question.correct -> %>
+          <div class="text-success test-assessment-question-result-correct" style="margin-top: -0.5em; font-size: 20vh;">
+            <i class="icon">check_circle_outline</i>
+          </div>
 
-  <% "result" -> %>
-    <%= cond do %>
-      <% @this_question.correct -> %>
-        <h1 class="text-center text-success test-assessment-question-result-correct" style="padding-top: 25%;">
-          <i class="icon">check_circle_outline</i>
-        </h1>
+        <% @this_question.guess != "" -> %>
+          <div class="text-danger test-assessment-question-result-incorrect" style="margin-top: -0.5em; font-size: 20vh;">
+            <i class="icon">clear</i>
+          </div>
 
-      <% @this_question.guess != "" -> %>
-        <h1 class="text-center text-danger test-assessment-question-result-incorrect" style="padding-top: 25%;">
-          <i class="icon">clear</i>
-        </h1>
+        <% @this_question.guess == "" -> %>
+          <div class="text-danger test-assessment-question-result-timed-out" style="font-size: 20vh;">
+            Timed out!
+          </div>
+      <% end %>
 
-      <% @this_question.guess == "" -> %>
-        <h1 class="text-center text-danger test-assessment-question-result-timed-out" style="padding-top: 25%;">
-          Timed out!
-        </h1>
     <% end %>
-
-<% end %>
+  </div>
+</div>

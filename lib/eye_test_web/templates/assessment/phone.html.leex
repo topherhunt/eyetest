@@ -19,7 +19,7 @@
   <% "letter_buttons" -> %>
     <div style="position: relative;">
       <%= for letter <- ~w(D E F L O P S T Z) do %>
-        <div style="float: left; width: 33%; padding: 10px;"><%= link letter, to: "#", class: "btn btn-dark", style: "font-size: 33vw; line-height: 1; display: block; width: 100%;", phx_click: "button_pressed", phx_value: letter %></div>
+        <div style="float: left; width: 33%; padding: 10px;"><%= link letter, to: "#", class: "btn btn-dark text-center", style: "font-size: 30vw; line-height: 1; display: block; width: 100%;", phx_click: "button_pressed", phx_value: letter %></div>
       <% end %>
     </div>
 

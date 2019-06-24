@@ -12,5 +12,12 @@
   </div>
 
   <p class="text-center">Or open this URL in your phone's browser:</p>
-  <input type="text" value="<%= url %>" class="form-control">
+  <div class="row">
+    <div class="col">
+      <input type="text" value="<%= url %>" class="form-control form-inline">
+    </div>
+    <div class="col">
+      <%= link "link", to: url, target: "_blank" %>
+    </div>
+  </div>
 </div>

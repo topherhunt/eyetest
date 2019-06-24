@@ -3,9 +3,19 @@
 
   <p>Ready to start your test?</p>
 
-  <ol>
-    <li>Make sure your browser window is full-screen! (not just full-height)</li>
-    <li>Stand/sit in your normal testing position with your phone ready</li>
-    <li>Press the button shown on your phone</li>
-  </ol>
+  <ul>
+    <%= case @assessment.which_eye do %>
+      <% "left" -> %>
+        <li>You're testing your <strong class="text-success">left</strong> eye. Make sure your <strong class="text-danger">right</strong> eye is covered.</li>
+
+      <% "right" -> %>
+        <li>You're testing your <strong class="text-success">right</strong> eye. Make sure your <strong class="text-danger">left</strong> eye is covered.</li>
+
+      <% "both" -> %>
+        <li>You're testing <strong class="text-success">both</strong> eyes. Don't cover up either eye.</li>
+    <% end %>
+    <li>Make sure your browser window is full-screen!</li>
+    <li>Stand / sit at your normal location (<strong><%= @assessment.location.name %></strong>) with your phone ready.</li>
+    <li>When you're ready to start, press the button on your phone.</li>
+  </ul>
 </div>

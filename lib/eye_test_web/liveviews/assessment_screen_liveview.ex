@@ -1,6 +1,6 @@
 defmodule EyeTest.AssessmentScreenLiveview do
   use Phoenix.LiveView
-  alias EyeTest.Data.Assessment
+  alias EyeTest.Data.{Assessment, Location}
   require Logger
 
   def mount(session, socket) do
@@ -20,7 +20,7 @@ defmodule EyeTest.AssessmentScreenLiveview do
       # For the settings page
       settings_changeset: Assessment.settings_changeset(assessment),
       # For the settings page
-      all_locations: EyeTest.Data.Location.all(user: assessment.user, order: :name),
+      all_locations: Location.all(user: assessment.user, order: :name),
       # All questions we've gone through so far. Will eventually be saved to the assessment.
       questions: [],
       # The question we're currently presenting
@@ -53,8 +53,12 @@ defmodule EyeTest.AssessmentScreenLiveview do
       |> Map.put(:action, :insert)
 
     if changeset.valid? do
-      # Update the in-memory Assessment struct, but don't save it yet
-      assessment = Map.merge(socket.assigns.assessment, changeset.changes)
+      # Store the settings in the in-memory Assessment struct, but don't save it yet
+      assessment =
+        socket.assigns.assessment
+        |> Map.merge(changeset.changes)
+        |> Map.merge(%{location: Location.get!(changeset.changes.location_id)})
+
       {:noreply, assign(socket, %{assessment: assessment, step: "connect_phone"})}
     else
       {:noreply, assign(socket, %{settings_changeset: changeset})}

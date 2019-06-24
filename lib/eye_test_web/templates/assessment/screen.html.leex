@@ -10,7 +10,7 @@
     <%= render "_connect_phone.html", assessment: @assessment %>
 
   <% "get_ready" -> %>
-    <%= render "_get_ready.html" %>
+    <%= render "_get_ready.html", assessment: @assessment %>
 
   <% "questions" -> %>
     <%= render "_questions.html", this_question: @this_question %>

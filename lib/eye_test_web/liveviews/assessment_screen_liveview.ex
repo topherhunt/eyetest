@@ -97,7 +97,9 @@ defmodule EyeTest.AssessmentScreenLiveview do
   end
 
   def handle_info({"question_timed_out", uuid} = msg, socket) do
-    if uuid == socket.assigns.this_question.uuid do
+    this_question = socket.assigns.this_question
+
+    if uuid == this_question.uuid && this_question[:guess] == nil do
       log socket, "Received msg #{inspect(msg)}. Question time expired."
       {:noreply, handle_question_response(socket, "")}
     else
@@ -108,11 +110,6 @@ defmodule EyeTest.AssessmentScreenLiveview do
 
   def handle_info("next_question" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
-
-    this_question = Map.drop(socket.assigns.this_question, [:step, :uuid])
-    questions = socket.assigns.questions ++ [this_question]
-    socket = assign(socket, :questions, questions)
-    log socket, "Completed questions so far: #{inspect(questions)}"
 
     if test_should_continue?(socket) do
       {:noreply, prep_this_question(socket)}
@@ -157,6 +154,7 @@ defmodule EyeTest.AssessmentScreenLiveview do
 
   defp prep_this_question(socket) do
     question = generate_question(socket)
+
     broadcast_to_phone(socket, {"display", "countdown"})
     :timer.send_after(100, self(), "reveal_question")
     assign(socket, %{this_question: question})
@@ -178,14 +176,17 @@ defmodule EyeTest.AssessmentScreenLiveview do
   end
 
   defp handle_question_response(socket, guess) do
-    this_question = record_answer(socket.assigns.this_question, guess)
+    this_question = mark_question_completed(socket.assigns.this_question, guess)
+    # We update the questions list now to avoid double-updating
+    questions = socket.assigns.questions ++ [this_question]
+    log socket, "Question answered: #{inspect(Map.drop(this_question, [:step]))}"
 
     broadcast_to_phone(socket, {"display", "blank"})
     :timer.send_after(500, self(), "next_question")
-    assign(socket, :this_question, this_question)
+    assign(socket, %{questions: questions, this_question: this_question})
   end
 
-  defp record_answer(question, guess) do
+  defp mark_question_completed(question, guess) do
     question
     |> Map.put(:guess, guess)
     |> Map.put(:correct, guess == question.actual)
@@ -199,9 +200,11 @@ defmodule EyeTest.AssessmentScreenLiveview do
   end
 
   defp complete_assessment(socket) do
+    questions = socket.assigns.questions |> Enum.map(& Map.drop(&1, [:step, :uuid]))
+
     socket.assigns.assessment
     |> Map.put(:completed_at, Timex.now())
-    |> Map.put(:questions, socket.assigns.questions)
+    |> Map.put(:questions, questions)
     |> EyeTest.Data.compute_scores()
     |> Map.from_struct()
     |> Assessment.insert!()

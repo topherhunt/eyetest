@@ -48,6 +48,11 @@
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <% end %>
 
+      <%# Hidden autoplaying video to prevent screen dimming / screensaver %>
+      <%# (for some reason, autoplaying videos can't go inside a LV or the CPU goes mad %>
+      <div style="position: fixed; top: -300px;"><video autoplay loop src="<%= Routes.static_path(EyeTestWeb.Endpoint, "/images/fall.mp4") %>" /></div>
+      <script>document.querySelector("video").playbackRate = 0.0</script>
+
       <%= render @view_module, @view_template, assigns %>
     </main>
 

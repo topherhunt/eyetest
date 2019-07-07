@@ -3,10 +3,6 @@
   data-test-letter="<%= @this_question.actual %>"
   data-test-question-uuid="<%= @this_question.uuid %>"
 >
-
-  <%# Hidden autoplaying video to stave off the screensaver %>
-  <div style="margin-top: -300px; overflow: hidden;"><video autoplay loop src="<%= Routes.static_path(EyeTestWeb.Endpoint, "/images/fall.mp4") %>"></div>
-
   <div style="padding-top: 28%; line-height: 0; font-size: <%= @this_question.size %>vh;">
     <%= if @this_question[:guess] == nil do %>
       <%= @this_question.actual %>

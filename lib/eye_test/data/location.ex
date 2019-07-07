@@ -24,13 +24,9 @@ defmodule EyeTest.Data.Location do
   def count(filters \\ []), do: __MODULE__ |> apply_filters(filters) |> Repo.count()
 
   def insert(params), do: new_changeset(params) |> Repo.insert()
-
   def insert!(params), do: insert(params) |> Repo.ensure_success()
-
   def update(struct, params), do: changeset(struct, params) |> Repo.update()
-
   def update!(struct, params), do: update(struct, params) |> Repo.ensure_success()
-
   def delete!(struct), do: Repo.delete!(struct)
 
   def new_changeset(params \\ %{}), do: changeset(%__MODULE__{}, params)

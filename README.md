@@ -1,5 +1,7 @@
 # EyeTest
 
+[![HitCount](http://hits.dwyl.com/topherhunt/eyetest.svg)](http://hits.dwyl.com/topherhunt/eyetest)
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

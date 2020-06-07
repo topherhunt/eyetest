@@ -2,6 +2,8 @@
 
 [![HitCount](http://hits.dwyl.com/topherhunt/eyetest.svg)](http://hits.dwyl.com/topherhunt/eyetest)
 
+**UPDATE**: I'm closing this down because someone else came out with a much better version of the same thing: https://myeyes.ai/
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

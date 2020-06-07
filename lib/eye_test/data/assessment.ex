@@ -90,6 +90,9 @@ defmodule EyeTest.Data.Assessment do
   #
   # Filters
   #
+  # This filter system allows flexible querying for one or more Assessments, e.g.:
+  #   Assessment.all(user: user, order: :started_at_desc, preload: [:location])
+  #
 
   def apply_filters(starting_query, filters) do
     Enum.reduce(filters, starting_query, fn {k, v}, query -> filter(query, k, v) end)

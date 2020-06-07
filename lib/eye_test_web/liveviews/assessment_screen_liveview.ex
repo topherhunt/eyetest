@@ -3,6 +3,7 @@ defmodule EyeTest.AssessmentScreenLiveview do
   alias EyeTest.Data.{Assessment, Location}
   require Logger
 
+  @impl true
   def mount(session, socket) do
     assessment = %Assessment{
       user: session.user,
@@ -37,14 +38,16 @@ defmodule EyeTest.AssessmentScreenLiveview do
     {:ok, socket}
   end
 
+  @impl true
   def render(assigns) do
     EyeTestWeb.AssessmentView.render("screen.html", assigns)
   end
 
   #
-  # Messages from client
+  # Messages from the browser
   #
 
+  @impl true
   def handle_event("submit_settings" = msg, params, socket) do
     log socket, "Received msg #{inspect(msg)} with params: #{inspect(params)}"
 
@@ -66,9 +69,10 @@ defmodule EyeTest.AssessmentScreenLiveview do
   end
 
   #
-  # Messages from server-side
+  # Messages from PubSub
   #
 
+  @impl true
   def handle_info("phone_connected" = msg, socket) do
     if socket.assigns.step == "connect_phone" do
       log socket, "Received msg #{inspect(msg)}."
@@ -81,16 +85,19 @@ defmodule EyeTest.AssessmentScreenLiveview do
     end
   end
 
+  @impl true
   def handle_info("start_test" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
     {:noreply, start_assessment(socket)}
   end
 
+  @impl true
   def handle_info({"button_pressed", guess} = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
     {:noreply, handle_question_response(socket, guess)}
   end
 
+  @impl true
   def handle_info({"question_timed_out", uuid} = msg, socket) do
     this_question = socket.assigns.this_question
 
@@ -103,6 +110,7 @@ defmodule EyeTest.AssessmentScreenLiveview do
     end
   end
 
+  @impl true
   def handle_info("next_question" = msg, socket) do
     log socket, "Received msg #{inspect(msg)}."
 

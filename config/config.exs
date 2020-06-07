@@ -24,7 +24,7 @@ config :eye_test, EyeTest.Repo,
   pool_size: 10,
   log: false
 
-# Configures the endpoint
+# Configure the endpoint
 config :eye_test, EyeTestWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: H.env!("SECRET_KEY_BASE"),
